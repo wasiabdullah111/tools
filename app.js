@@ -7,7 +7,7 @@ app.use(express.static('public'));
 
 // Define a route for the root path
 app.get('/', (req, res) => {
-  res.send('<h1>Jazz Pakistan!</h1>');
+  res.send('<h1>Jazz Pakistan.!</h1>');
 });
 
 // Start the server
