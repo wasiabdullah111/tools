@@ -19,10 +19,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t your-dockerhub-username/node-app .
+        run: docker build -t wasiabdullah111/node-app .
 
       - name: Push Docker image
-        run: docker push your-dockerhub-username/node-app
+        run: docker push wasiabdullah111/node-app
 
       - name: Deploy to EC2
         env:
@@ -33,9 +33,9 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
-            docker pull your-dockerhub-username/node-app
+            docker pull wasiabdullah111/node-app
             docker stop node-app || true
             docker rm node-app || true
-            docker run -d -p 80:3000 --name node-app your-dockerhub-username/node-app
+            docker run -d -p 80:3000 --name node-app wasiabdullah111/node-app
           EOF
 
