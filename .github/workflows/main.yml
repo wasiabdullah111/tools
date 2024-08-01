@@ -22,7 +22,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t wasiabdullah111/node-app .
 
-      - name: Push Docker image
+      - name: Push the Docker image
         run: docker push wasiabdullah111/node-app
 
       - name: Set up SSH
