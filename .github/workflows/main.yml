@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Log to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -28,8 +28,8 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/private_key.pem
-          chmod 600 ~/.ssh/private_key.pem
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/git-key
+          chmod 600 ~/.ssh/git-key
           ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+          ssh -i ~/.ssh/git-key $EC2_USER@$EC2_HOST << 'EOF'
             docker pull wasiabdullah111/node-app
             docker stop node-app || true
             docker rm node-app || true
