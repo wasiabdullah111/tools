@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build the Docker image
+      - name: Build one Docker image
         run: docker build -t wasiabdullah111/node-app .
 
       - name: Push the Docker image
