@@ -1,4 +1,4 @@
-name: Deploy Node.js App
+name: Build and Push Docker Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: self-hosted
 
     steps:
@@ -19,32 +19,9 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build one Docker image
+      - name: Build Docker image
         run: docker build -t wasiabdullah111/node-app .
 
       - name: Push Docker image
         run: docker push wasiabdullah111/node-app
-
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/git-key
-          chmod 600 ~/.ssh/git-key
-          ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-
-      - name: Deploy to the EC2
-        run: |
-          ssh -i ~/.ssh/git-key -o IdentitiesOnly=yes $EC2_USER@$EC2_HOST << 'EOF'
-            docker pull wasiabdullah111/node-app
-            docker stop node-app || true
-            docker rm node-app || true
-            docker run -d -p 80:3000 --name node-app wasiabdullah111/node-app
-          EOF
-
-        env:
-          EC2_USER: ${{ secrets.EC2_USER }}
-          EC2_HOST: ${{ secrets.EC2_HOST }}
 
