@@ -1,4 +1,4 @@
-name: 2- Deploy Node.js App only
+name: Deploy Node.js App
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    	
 
     steps:
       - name: Checkout code
